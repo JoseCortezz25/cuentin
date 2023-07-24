@@ -1,0 +1,31 @@
+---
+const { items } = Astro.props
+---
+
+<div class="menu">
+  <ul>
+    {items.map(item => <li>{item}</li>)}
+  </ul>
+</div>
+
+<style>
+  .menu {
+    color: var(--title-color-dark);
+    border-top: 1px solid var(--title-color-dark);
+    border-bottom: 1px solid var(--title-color-dark);
+  }
+  .menu ul {
+    display: flex;
+  }
+  
+  .menu ul li {
+    flex: 1;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px 10px;
+  }
+  .menu ul li:hover {
+    background-color: var(--light-color-gray);
+    color: var(--title-color-dark);
+  }
+</style>

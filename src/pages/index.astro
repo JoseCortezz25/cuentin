@@ -1,15 +1,37 @@
 ---
----
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Head from "../components/Head.astro";
+import Menu from "../components/Menu.astro";
+import Card from "../components/Card.astro";
+import { getCollection } from "astro:content";
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+const allLigaPost = (await getCollection('cuentos')).sort(
+	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+<BaseLayout>
+  <Head />
+  <Menu items={["Hadas", "Fábulas", "Leyendas", "Fantásticos", "Terror"]} />
+
+  <section class="feed">
+    {
+      allLigaPost.map((post) => (
+        <Card
+					image={post.data.img}
+          title={post.data.title}
+          date={post.data.publishDate}
+					slug={post.slug}
+        />
+      ))
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .feed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+</style>

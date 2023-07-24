@@ -1,0 +1,76 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostLayout from "../../layouts/PostLayout.astro";
+
+export async function getStaticPaths() {
+  const allLigaPosts = await getCollection("cuentos");
+  return allLigaPosts.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<BaseLayout>
+  <PostLayout>
+    <section class="Post__image">
+      <img src={entry.data.img} alt="" />
+    </section>
+    <h1>{entry.data.title}</h1>
+    <ul>
+      {entry.data.tags.map((tag) => <li>{tag}</li>)}
+    </ul>
+    <Content />
+  </PostLayout>
+</BaseLayout>
+
+<style>
+  .Post__image {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    border-radius: 20px;
+    margin-top: var(--mb-2-5);
+  }
+
+  .Post__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
+  }
+
+  h1 {
+    font-size: var(--big-font-size);
+    margin-bottom: var(--mb-1);
+    margin-top: var(--mb-1);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  ul li {
+    background-color: var(--liberty-color);
+    display: inline;
+    font-weight: 700;
+    color: var(--white-color);
+    padding: 10px 17px;
+    border-radius: 30px;
+    margin-bottom: var(--mb-2);
+    text-transform: capitalize;
+    transition: background 100ms ease-in;
+  }
+
+  ul li:hover {
+    background: var(--purple-color);
+  }
+  ul li:not(:last-child) {
+    margin-right: 10px;
+  }
+</style>
